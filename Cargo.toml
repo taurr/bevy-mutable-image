@@ -11,8 +11,10 @@ description = """
 Create/update images/textures by manually drawing into them in your code.
 """
 license = "MIT OR Apache-2.0"
-#repository = "https://github.com/USERNAME/texture-draw"
+repository = "https://github.com/taurr/bevy-mutable-image"
 edition = "2021"
+categories = ["game-development", "graphics"]
+keywords = ["bevy", "image", "textures"]
 
 [features]
 default = []
