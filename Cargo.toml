@@ -1,0 +1,36 @@
+[workspace]
+resolver = "2"
+members = []
+
+[package]
+name = "bevy-mutate-image"
+version = "0.1.0"
+authors = ["Johnny T. Vestergaard <jtv@jrtv.dk>"]
+readme = "README.md"
+description = """
+Create/update images/textures by manually drawing into them in your code.
+"""
+license = "MIT OR Apache-2.0"
+#repository = "https://github.com/USERNAME/texture-draw"
+edition = "2021"
+
+[features]
+default = []
+
+[dependencies]
+bevy = { version = "0.8", default-features = false, features = ["bevy_asset","bevy_render"] }
+image = "0.24"
+
+[dev-dependencies]
+bevy = { version = "0.8", features = [] }
+
+# Enable only a small amount of optimization in debug mode
+[profile.dev]
+opt-level = 1
+
+# Enable high optimizations for dependencies (incl. Bevy), but not for our code:
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+lto = "thin"
