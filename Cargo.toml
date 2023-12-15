@@ -20,11 +20,11 @@ keywords = ["bevy", "image", "textures"]
 default = []
 
 [dependencies]
-bevy = { version = "0.8", default-features = false, features = ["bevy_asset","bevy_render"] }
+bevy = { version = "0.12", default-features = false, features = ["bevy_asset","bevy_render"] }
 image = "0.24"
 
 [dev-dependencies]
-bevy = { version = "0.8", features = [] }
+bevy = { version = "0.12", features = [] }
 
 # Enable only a small amount of optimization in debug mode
 [profile.dev]

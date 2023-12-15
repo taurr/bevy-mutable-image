@@ -1,7 +1,4 @@
-use bevy::{
-    prelude::*,
-    render::{camera::ScalingMode, texture::ImageSettings},
-};
+use bevy::{prelude::*, render::camera::ScalingMode};
 use bevy_mutate_image::MutableImageHandle;
 use image::{GenericImage, GenericImageView, Rgba};
 
@@ -12,43 +9,49 @@ const VIEWPORT_HEIGHT: f32 = 9.0;
 
 fn main() {
     App::new()
-        .insert_resource(WindowDescriptor {
-            title: format!(
-                "{} - v{}",
-                env!("CARGO_PKG_NAME"),
-                env!("CARGO_PKG_VERSION")
-            ),
-            width: WIDTH,
-            height: HEIGHT,
-            ..default()
-        })
-        .insert_resource(ImageSettings::default_nearest())
-        .add_plugins(DefaultPlugins)
-        .add_startup_system(setup)
-        .add_system(update_mutable_image)
+        .add_plugins(
+            DefaultPlugins
+                .set(ImagePlugin::default_nearest())
+                .set(WindowPlugin {
+                    primary_window: Some(Window {
+                        title: format!(
+                            "{} - v{}",
+                            env!("CARGO_PKG_NAME"),
+                            env!("CARGO_PKG_VERSION")
+                        ),
+                        resolution: Vec2::new(WIDTH, HEIGHT).into(),
+                        ..default()
+                    }),
+                    ..default()
+                }),
+        )
+        .add_systems(Startup, setup)
+        .add_systems(Update, update_mutable_image)
         .run();
 }
 
 fn setup(mut commands: Commands, mut assets: ResMut<Assets<Image>>) {
     // Spawn camera
-    commands.spawn_bundle(Camera2dBundle {
+    commands.spawn(Camera2dBundle {
         projection: OrthographicProjection {
-            scaling_mode: ScalingMode::Auto {
+            near: -1000.,
+            far: 1000.,
+            scaling_mode: ScalingMode::AutoMin {
                 min_width: VIEWPORT_WIDTH,
                 min_height: VIEWPORT_HEIGHT,
             },
-            ..Default::default()
+            ..default()
         },
-        ..Default::default()
+        ..default()
     });
 
     // Spawn sprite using a mutable image as texture
     let component =
         MutableImageHandle::new(VIEWPORT_WIDTH as u32, VIEWPORT_HEIGHT as u32, &mut assets);
     commands
-        .spawn_bundle(SpriteBundle {
+        .spawn(SpriteBundle {
             texture: component.image_handle(),
-            ..Default::default()
+            ..default()
         })
         .insert(component);
 }
